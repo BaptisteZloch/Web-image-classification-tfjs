@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>tfjs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+
+<body>
+    <h1 class="text-center" style="background-color:red;padding: 1%;"><em>Tensorflow JS</em></h1>
+    <div class="w3-card w3-padding">
+        <p class="w3-center">Select an image: </p>
+        <br>
+        <div class="w3-center">
+            <img id="image" src="cat.jpeg" alt="cat image">
+        </div>
+        <div class="w3-center">
+            <img id="grayscale" alt="cat image">
+        </div>
+
+        <br>
+        <div class="w3-center">
+            <button onclick="make_prediction()" class="w3-button w3-gray">Predict</button>
+        </div>
+        <p class="w3-center">Result : <span id="rep"></span></p>
+    </div>
+    <div class="w3-padding w3-center">
+        <i><a href="www.zlochteamastro.com" style="text-decoration: none;">Zloch Baptiste</a></i>
+    </div>
+    <footer>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"> </script>
+        <script>
+            var model = undefined;
+            async function loadModel() {
+                model = await tf.loadLayersModel("model.json");
+                console.log("model loaded")
+            }
+            loadModel();
+
+            async function make_prediction() {
+                console.log("Ready to predict...");
+                let tensorImg = tf.browser.fromPixels(document.getElementById("image")).resizeNearestNeighbor([96, 96]).toFloat().expandDims();
+                let prediction = await model.predict(tensorImg).data();
+                console.log(prediction);
+                if (prediction[0] === 1) {
+                    console.log("CAT");
+                    answer = "Cat";
+
+                } else if (prediction[0] === 0) {
+                    console.log("Human");
+                    answer = "Human";
+
+                } else {
+                    console.log("Other");
+                    answer = "Other";
+                }
+                console.log("Predicted !");
+                //document.getElementById("rep").innerHTML = output.dataSync()[0].toFixed(2);
+            }
+        </script>
+    </footer>
+</body>
+
+</html>
